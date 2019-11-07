@@ -1,21 +1,27 @@
- 
 <div class="template">
-    <div class="buttons">
-  <%for i in (0...$template[1].length)%>
-    <%if $template[1][i]=="_"%>
-      <button id="btn1">
-      </button>
-    <%else%>
-      <button id="btn2">
-        <%=$template[1][i]%>
+  <div class="buttons">
+    <%for i in (0...$template[1].length)%>
+      <%if $template[1][i]=="_"%>
+        <button id="btn1">
+        </button>
+      <%else%>
+        <button id="btn2">
+          <%=$template[1][i]%> </button>
       <%end%>
-    </button>
-  <%end%>
+    <%end%>
   </div>
   <form action="/play" method="post">
     <div class="form-group">
-      <input class="form-control" type="text" name="letter" required>
+      <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter" required>
       <button type="submit" class="btn btn-primary">Try</button>
     </div>
   </form>
+  <div class="alphabet">
+    <%$letters=*('A'..'Z')%>
+    <%for i in (0...$letters.length)%>
+      <button>
+        <%=$letters[i]%>
+      </button>
+    <%end%>
+  </div>
 </div>

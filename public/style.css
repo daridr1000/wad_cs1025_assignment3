@@ -4,51 +4,71 @@ footer {
     background-color: rgba(14, 15, 28, 1);
 }
 
+h1{
+    top:3em;
+    position: relative;
+    text-align:center;
+}
+
+#home{
+    top:10em;
+    text-align:center;
+    position: relative;
+    font-size: 20px;
+}
 
 body {
     margin-left:auto;
 	margin-right:auto;
 	margin-top:0px;
     margin-bottom:0px;
-    color:red;
-    background-color: rgba(128, 128, 128, 0.37);
+    color:white;
+    background-color: rgba(128, 128, 128, 0.979);
+    
 }
 .navbar{
     display: inline-table;
+   
 }
 
 #footer {
-    color: white;
+    position: fixed;
+    left: 0;
     bottom: 0;
-    width:100%;
-    position:absolute;
-    height: 2.5rem;
+    width: 100%;
+   
 }
+header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
 
+}
 .template>p {
     color: red;
 }
 .template{
-    float:left;
     padding-bottom: 2.5rem;
 }
 
 .buttons{
-    position: absolute;
-    margin:150px;
-}
 
-form{
     margin:50px;
 }
 
+form{
+    margin:200px;
+    position: relative;
+}
+
 .form-control{
-    width:50px;
+    width:35px;
 }
 
 
 .btn{
-    margin:70px;
+    margin:10px;
     
 }
 
@@ -72,3 +92,15 @@ button{
     background-color: none;
 }
 
+.alphabet{
+    left:40em;
+    top:-20em;
+    position: relative;
+    width: 50%;
+}
+
+.alphabet > button{
+    width:50px;
+    float:center;
+    text-align: center;
+}

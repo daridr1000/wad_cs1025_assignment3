@@ -152,7 +152,7 @@ end
 		erb :home
 	end
 
-	
+	$letters=*('A'..'Z')
 	get '/new' do
 		g=WOF_Game::Game.new(@input,@output)
 		words = g.readwordfile("wordfile.txt")
@@ -164,7 +164,6 @@ end
 		template=$template[1]
 		template=template[1..template.length-2]
 		$template[1]=template
-
 		erb :new
 	end
 	
@@ -174,6 +173,8 @@ end
 	end
 	post '/new' do
 		letter=params[:letter].upcase
+		index=$letters.index(letter)
+		$letters[index]=""
 		for i in(0..$template[0].length)
 			if letter==$template[0][i]
 				$template[1][i]=letter
@@ -182,15 +183,28 @@ end
 		redirect '/play'
 	end
 	post '/play' do
+		$sameletter=""
 		letter=params[:letter].upcase
-		for i in(0..$template[0].length)
-			if letter==$template[0][i]
-				$template[1][i]=letter
+		if $letters.include? letter
+		index=$letters.index(letter)
+			$letters[index]=""
+			for i in(0..$template[0].length)
+				if letter==$template[0][i]
+					$template[1][i]=letter
+				end
 			end
+		else
+			$sameletter="Pick another letter. This one was already used"
 		end
 		redirect '/play'
 	end
-	
+	get '/notfound' do
+		erb :notfound
+	end
+	not_found do
+		status 404
+		redirect '/notfound'
+	  end
 	# Any code added to web-based game should be added above.
 
 # End program
