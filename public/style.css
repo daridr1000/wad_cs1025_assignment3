@@ -1,22 +1,28 @@
 header,
 footer {
     text-align: center;
+    background-color: rgba(14, 15, 28, 1);
 }
-
 
 
 body {
-    background: rgba(14, 15, 28, 1);
-    float:center;
     margin-left:auto;
 	margin-right:auto;
 	margin-top:0px;
-	margin-bottom:0px;
+    margin-bottom:0px;
+    color:red;
+    background-color: rgba(128, 128, 128, 0.37);
+}
+.navbar{
+    display: inline-table;
 }
 
-footer {
+#footer {
     color: white;
-   
+    bottom: 0;
+    width:100%;
+    position:absolute;
+    height: 2.5rem;
 }
 
 .template>p {
@@ -24,6 +30,25 @@ footer {
 }
 .template{
     float:left;
+    padding-bottom: 2.5rem;
+}
+
+.buttons{
+    position: absolute;
+    margin:150px;
+}
+
+form{
+    margin:50px;
+}
+
+.form-control{
+    width:50px;
+}
+
+
+.btn{
+    margin:70px;
     
 }
 
@@ -41,3 +66,9 @@ button{
     background-color:green;
     color:white;
 }
+.navbar>a{
+    color:white;
+    text-decoration: none;
+    background-color: none;
+}
+

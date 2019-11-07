@@ -6,6 +6,9 @@ require 'sinatra'
 # The file where you are to write code to pass the tests must be present in the same folder.
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
 require "#{File.dirname(__FILE__)}/wad_wof_gen_01"
+
+
+
 set	:bind,'0.0.0.0'
 
 # Main program
@@ -128,21 +131,13 @@ module WOF_Game
 	
 		exit	# Does not allow command-line game to run code below relating to web-based version
 	
-else
-	if game=='2'
-		words = g.readwordfile(filename)
-	secret = g.gensecretword
-	g.setsecretword(secret)
-	g.createtemplate
-	$template=g.getsecrettemplate
-	#Eliminating the first and the final bracket of the template
-	template=$template[1]
-	template=template[1..template.length-2]
-	$template[1]=template
+
+	
+	
 	end
 end
 
-end
+
 
 # End modules
 
@@ -150,18 +145,52 @@ end
 
 	# Any code added to web-based game should be added below.
 	
+
+	
+	
 	get '/' do 
-		erb :layout
+		erb :home
 	end
-	post '/' do
+
+	
+	get '/new' do
+		g=WOF_Game::Game.new(@input,@output)
+		words = g.readwordfile("wordfile.txt")
+		secret = g.gensecretword
+		g.setsecretword(secret)
+		g.createtemplate
+		$template=g.getsecrettemplate
+	#Eliminating the first and the final bracket of the template
+		template=$template[1]
+		template=template[1..template.length-2]
+		$template[1]=template
+
+		erb :new
+	end
+	
+
+	get '/play' do
+		erb :play
+	end
+	post '/new' do
 		letter=params[:letter].upcase
 		for i in(0..$template[0].length)
 			if letter==$template[0][i]
 				$template[1][i]=letter
 			end
 		end
-		redirect '/'
+		redirect '/play'
 	end
+	post '/play' do
+		letter=params[:letter].upcase
+		for i in(0..$template[0].length)
+			if letter==$template[0][i]
+				$template[1][i]=letter
+			end
+		end
+		redirect '/play'
+	end
+	
 	# Any code added to web-based game should be added above.
 
 # End program

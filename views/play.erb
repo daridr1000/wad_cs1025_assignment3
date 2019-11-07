@@ -1,0 +1,21 @@
+ 
+<div class="template">
+    <div class="buttons">
+  <%for i in (0...$template[1].length)%>
+    <%if $template[1][i]=="_"%>
+      <button id="btn1">
+      </button>
+    <%else%>
+      <button id="btn2">
+        <%=$template[1][i]%>
+      <%end%>
+    </button>
+  <%end%>
+  </div>
+  <form action="/play" method="post">
+    <div class="form-group">
+      <input class="form-control" type="text" name="letter" required>
+      <button type="submit" class="btn btn-primary">Try</button>
+    </div>
+  </form>
+</div>

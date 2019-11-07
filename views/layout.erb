@@ -5,38 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="icon" href="/icon.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
     <title>Hangman</title>
   </head>
-
+ 
   <body>
-    <header>
-      <img src="/hangman.jpg">
-    </header>
-    <div class="template">
-      <%for i in (0...$template[1].length)%>
-      <%if $template[1][i]=="_"%>
-        <button id="btn1">
-          
-         
-          </button>
-          <%else%>
-          <button id="btn2">
-              <%=$template[1][i]%>
-          <%end%>
-          </button>
-        
-      <%end%>
-      <form action="/" method="post">
-        <input type="text" name="letter" required>
-        <input type="submit">
-      </form>
-    </div>
-    <div class="view_content">
-    </div>
+      <header>
+        <img src="/hangman.jpg">
+      </header>
+      <nav class="navbar  bg-primary">
+        <a class="navbar  bg-primary" href="/">Home</a>
+        <a class="navbar  bg-primary" href="/new">New Game</a>
+        <a class="navbar  bg-primary" href="/">Analysis</a>
+        <a class="navbar  bg-primary" href="/">Leaderboard</a>
+      </nav>
+      
+      <div class="view_content">
+        <%=yield%>
+      </div>
+      <footer id="footer">
+        <p>Created by Darius Dragnea, 51984000</p>
+      </footer>
   </body>
-  <footer>
-    <p>Created by Darius Dragnea, 51984000</p>
-  </footer>
-
+    
 </html>
