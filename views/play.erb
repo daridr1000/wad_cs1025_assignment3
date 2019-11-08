@@ -12,10 +12,30 @@
   </div>
   <form action="/play" method="post">
     <div class="form-group">
-      <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter" <%if $sameletter!=""%> onclick="sameLetter()" <%end%> required>
+      <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter"  required>
       <button type="submit" class="btn btn-primary">Try</button>
+     
     </div>
   </form>
+  <div class="lives">
+      <button>Turns left: <%=$lives%></button>
+  </div> 
+  <div class="lives">
+      <button>Score: <%=$score%></button>
+  </div>
+  <%if $lives==0%>
+    <script> 
+       alert("Computer wins! You ran out of turns \n Your score: <%=$score%>")
+    </script>
+   
+    <a href="/new">RESTART </a>
+   
+    <%end%>
+    <%if $numberOfLetters==$template[0].length-$spaces%>
+      <script>
+        alert("You won! \n Your score: <%=$score%>")
+      </script>
+      <%end%>
   <div class="alphabet">
     <%for i in (0...$letters.length)%>
       <button>
@@ -23,4 +43,5 @@
       </button>
     <%end%>
   </div>
+   
 </div>

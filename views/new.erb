@@ -16,6 +16,13 @@
       <button type="submit" class="btn btn-primary">Try</button>
     </div>
   </form>
+   <div class="lives">
+      <button>Turns left: <%=$lives%></button>
+  </div>
+  <div class="lives">
+      <button>Score: <%=$score%></button>
+  </div>
+
   <div class="alphabet">
     <%$letters=*('A'..'Z')%>
     <%for i in (0...$letters.length)%>
@@ -24,4 +31,5 @@
       </button>
     <%end%>
   </div>
+ 
 </div>

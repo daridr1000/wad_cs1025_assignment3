@@ -1,3 +1,5 @@
-function sameLetter(){
-    alert("Try another letter! This one has already been picked")
+function noTurnsLeft(){
+    alert("Computer wins! You ran out of turns left")
 }
+
+

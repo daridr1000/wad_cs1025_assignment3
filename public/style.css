@@ -104,3 +104,22 @@ button{
     float:center;
     text-align: center;
 }
+
+.lives{
+    position: relative;
+    top:-50px;
+    left:50px;
+    display:inline-block;
+}
+
+.lives > button{
+    width:100px;
+}
+
+.template > a, .template > a:hover{
+    text-decoration: none;
+}
+
+.template > a:hover{
+    text-decoration: none;
+}

@@ -94,6 +94,7 @@ module WOF_Game
 		def createtemplate
 			# Creates the template for the secret word.
 			@template = "[#{'_' * @secretword.length}]"
+			
 		end
 
 		def getsecrettemplate
