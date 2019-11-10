@@ -1,0 +1,45 @@
+<%if $template%>
+<%if $lives==0 or $template[0]==$template[1]%>
+  <%if $lives==0%>
+     <script>window.alert("Computer wins! You ran out of turns \n Your score: <%=$score%>")</script>
+  <%end%>
+  <%if $template[0]==$template[1]%>
+   
+    <script>window.alert("You won! \n Your score: <%=$score%>")</script>
+  <%end%>
+  <%$template=nil%>
+<%end%>
+<%end%>
+<script>
+  function loss(){
+          alert("Computer wins! You ran out of turns \n Your score: <%=$score%>")
+  }
+  function win(){
+     alert("You won! \n Your score: <%=$score%>")
+  }
+</script>
+<div class="leaderboard">
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Score</th>
+        <th scope="col">Word</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%files=File.open("names.txt").to_a%>
+      <%line_number=1%>
+      <%for i in (0...files.length).step(3)%>
+        <tr>
+          <th scope="row"><%=line_number%></th>
+          <%line_number+=1%>
+          <td><%=files[i]%></td>
+          <td><%=files[i+1]%></td>
+          <td><%=files[i+2]%>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+</div>

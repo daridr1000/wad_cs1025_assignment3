@@ -158,7 +158,7 @@ end
 	get '/new' do
 		$numberOfLetters=0
 		$lives = 5
-		$score = 100
+		
 		$spaces = 0
 		g=WOF_Game::Game.new(@input,@output)
 		words = g.readwordfile("wordfile.txt")
@@ -166,6 +166,8 @@ end
 		g.setsecretword(secret)
 		g.createtemplate
 		$template=g.getsecrettemplate
+		$secretword=$template[0]
+		$score = 100*$secretword.length
 	#Eliminating the first and the final bracket of the template
 		template=$template[1]
 	 
@@ -178,7 +180,7 @@ end
 				$template[1][i]=" "
 			end
 		end
-		#Same letter verification
+		
 		erb :new
 	end
 	
@@ -186,6 +188,12 @@ end
 	get '/play' do
 		erb :play
 	end
+
+
+	get '/start' do
+		erb :start
+	end
+
 	post '/new' do
 		foundLetter=false
 		letter=params[:letter].upcase
@@ -196,17 +204,18 @@ end
 				$template[1][i]=letter
 				$numberOfLetters+=1
 				foundLetter=true
-				$score+=100
+			
 			else
 				
 			end
 		end
 		if foundLetter==false
 			$lives-=1
-			$score-=20
+			$score-=100
 		end
 		redirect '/play'
 	end
+	
 	post '/play' do
 		foundLetter=false
 		letter=params[:letter].upcase
@@ -218,21 +227,53 @@ end
 					$template[1][i]=letter
 					$numberOfLetters+=1
 					foundLetter=true
-					$score+=100
+				
 				end
 			
 			end
 		end
 		if foundLetter==false
 			$lives-=1
-			$score-=20
+			$score-=10*$secretword.length
 		end
-		
+		if $template[0]==$template[1]
+			file=File.open("names.txt","a")
+				file.puts $score
+				file.puts $secretword
+	      	  file.close
+			redirect '/leaderboard'
+		end	
+		if $lives==0
+			$score=0
+			file=File.open("names.txt","a")
+				file.puts $score
+				file.puts $secretword
+	      	  file.close
+			redirect '/leaderboard'
+		end
 		redirect '/play'
 	end
+	
+	get '/leaderboard' do
+		
+		erb :leaderboard
+	end
+	
+	
+	post '/start' do
+		
+		file=File.open("names.txt","a")
+			file.puts params[:name]
+		file.close
+		redirect '/new'
+	end	
+	
+	
 	get '/notfound' do
 		erb :notfound
 	end
+
+	
 	not_found do
 		status 404
 		redirect '/notfound'
