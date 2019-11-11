@@ -190,24 +190,31 @@ end
 	get '/start' do
 		$name=""
 		$letter=""
+		$start=true
 		$usedletters=Array.new
+		$foundLetter=Array.new
 		erb :start
 	end
 
 	
 	post '/new' do
-		foundLetter=false
 		letter=params[:letter].upcase
 		$usedletters+=[letter]
+		foundLetter=false
 		index=$letters.index(letter)
 		$letters[index]=""
 		for i in(0..$template[0].length)
 			if letter==$template[0][i]
 				$template[1][i]=letter
+				if foundLetter==false
+					$foundLetter+=[true]
+				end
 				foundLetter=true
+				
 			end
 		end
 		if foundLetter==false
+			$foundLetter+=[false]
 			$lives-=1
 			$score-=100
 		end
@@ -225,21 +232,29 @@ end
 			for i in(0..$template[0].length)
 				if letter==$template[0][i]
 					$template[1][i]=letter
+					if foundLetter==false
+						$foundLetter+=[true]
+					end
 					foundLetter=true
+					
 				end
 			end
 		else
 			$used=true
 		end
-		if foundLetter==false and $used==false
-			$lives-=1
-			$score-=10*$secretword.length
+		if foundLetter==false 
+			if $used==false
+				$lives-=1
+				$score-=10*$secretword.length
+			end
+			$foundLetter+=[false]
 		end
 		if $template[0]==$template[1]
 			file=File.open("names.txt","a")
 				file.puts $score
 				file.puts $secretword
-	      	  file.close
+				file.close
+				$analysis_message="Word guessed! You won! Secret word:#{$template[0]}"
 			redirect '/leaderboard'
 		end	
 		if $lives==0
@@ -247,30 +262,36 @@ end
 			file=File.open("names.txt","a")
 				file.puts $score
 				file.puts $secretword
-	      	  file.close
+				file.close
+				$analysis_message="You ran out of turns! Computer won!Secret word:#{$template[0]}"
 			redirect '/leaderboard'
 		end
 		redirect '/play'
 	end
 	
 	get '/leaderboard' do
-		
+		$files=File.open("names.txt").to_a
+		names=Array.new
+		if $files.length>1
+			for i in (0..$files.length).step(3)
+				names+=[[$files[i],$files[i+1],$files[i+2]]]
+			end
+		end
+		names.delete_at(names.length-1)
+		names=names.sort_by {|k|k[1]}.reverse
+		$files=names
 		erb :leaderboard
 	end
 	
 	
 	post '/start' do
-		
 		file=File.open("names.txt","a")
 		$name=params[:name]
+		
 		file.puts $name
 		file.close
 		redirect '/new'
 	end	
-	
-	
-	
-
 	get '/analysis' do
 		erb :analysis
 	end

@@ -15,11 +15,16 @@
     <%end%>
   <form action="/play" method="post">
     <div class="form-group">
-      <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter"  required>
+      <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter" id="text"  required>
       <button type="submit" class="btn btn-primary">Try</button>
      
     </div>
   </form>
+  <script>
+    window.onload = function(){
+    document.getElementById("text").focus();
+    }
+  </script>
   <div class="lives">
     <button>Turns left: <%=$lives%></button>
   </div>

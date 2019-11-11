@@ -4,9 +4,15 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-default">Type your name</span>
   </div>
-  <input class="form-control" type="text"  name="name" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+  <input class="form-control" type="text"  name="name" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="text">
 </div>
 <div class="name">
     <button type="submit" >START GAME</button>
 </div>
 </form>
+
+<script>
+    window.onload = function(){
+    document.getElementById("text").focus();
+    }
+  </script>

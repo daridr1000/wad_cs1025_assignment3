@@ -3,23 +3,18 @@
 <%if $template%>
 <%if $lives==0 or $template[0]==$template[1]%>
   <%if $lives==0%>
-     <script>window.alert("Computer wins!\n  You ran out of turns \nThe word was <%=$secretword%>\n Your score: <%=$score%>")</script>
+     <script>window.alert("Computer wins!\n  You ran out of turns \nThe word was <%=$secretword%>\nYour score: <%=$score%> \n If u want to start a new game, press the button from the menu!")
+              
+     </script>
   <%end%>
   <%if $template[0]==$template[1]%>
    
-    <script>window.alert("You won! \n The word was <%=$secretword%>\n Your score: <%=$score%>")</script>
+    <script>window.alert("You won! \n The word was <%=$secretword%>\n Your score: <%=$score%>\nIf u want to start a new game, press the button from the menu!)</script>
   <%end%>
   <%$template=nil%>
 <%end%>
 <%end%>
-<script>
-  function loss(){
-          alert("Computer wins! You ran out of turns \n  Your score: <%=$score%>")
-  }
-  function win(){
-     alert("You won! \n Your score: <%=$score%>")
-  }
-</script>
+
 <div class="leaderboard">
   <table class="table table-hover table-dark">
     <thead>
@@ -31,15 +26,13 @@
       </tr>
     </thead>
     <tbody>
-      <%files=File.open("names.txt").to_a%>
-      <%line_number=1%>
-      <%for i in (0...files.length).step(3)%>
+      
+      <%for i in (0...$files.length)%>
         <tr>
-          <td scope="row"><%=line_number%></td>
-          <%line_number+=1%>
-          <td><%=files[i]%></td>
-          <td><%=files[i+1]%></td>
-          <td><%=files[i+2]%>
+          <td scope="row"><%=(i+1)%></td>
+          <td><%=$files[i][0]%></td>
+          <td><%=$files[i][1]%></td>
+          <td><%=$files[i][2]%>
         </tr>
       <%end%>
     </tbody>
