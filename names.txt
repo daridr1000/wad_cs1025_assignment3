@@ -1,1 +1,13 @@
-
+darius
+700
+MALLARD
+darius
+320
+DUCK
+darius
+400
+EIDER
+darius
+400
+DUCK
+darius

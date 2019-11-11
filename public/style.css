@@ -132,3 +132,8 @@ form {
 .name >button{
     width:200px;
 }
+
+.leaderboard{
+  position:relative;
+  top:6em;
+}

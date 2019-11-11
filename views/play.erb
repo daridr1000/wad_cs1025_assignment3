@@ -10,6 +10,9 @@
       <%end%>
     <%end%>
   </div>
+  <%if $used==true%>
+    <script>window.alert("You have already chosen this letter. Try another one!")</script>
+    <%end%>
   <form action="/play" method="post">
     <div class="form-group">
       <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter"  required>
@@ -18,14 +21,12 @@
     </div>
   </form>
   <div class="lives">
-    <button>Lives: <%=$lives%></button>
+    <button>Turns left: <%=$lives%></button>
   </div>
   <div class="lives">
     <button name="score">Score: <%=$score%></button>
   </div>
-  <%if $lives==0 or$template[0]==$template[1]%>
-    <a href="/new">TRY AGAIN</a>
-  <%end%>
+  
   <div class="alphabet">
     <%for i in (0...$letters.length)%>
       <button>

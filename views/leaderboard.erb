@@ -1,18 +1,20 @@
+<h1>Leaderboard</h1>
+
 <%if $template%>
 <%if $lives==0 or $template[0]==$template[1]%>
   <%if $lives==0%>
-     <script>window.alert("Computer wins! You ran out of turns \n Your score: <%=$score%>")</script>
+     <script>window.alert("Computer wins!\n  You ran out of turns \nThe word was <%=$secretword%>\n Your score: <%=$score%>")</script>
   <%end%>
   <%if $template[0]==$template[1]%>
    
-    <script>window.alert("You won! \n Your score: <%=$score%>")</script>
+    <script>window.alert("You won! \n The word was <%=$secretword%>\n Your score: <%=$score%>")</script>
   <%end%>
   <%$template=nil%>
 <%end%>
 <%end%>
 <script>
   function loss(){
-          alert("Computer wins! You ran out of turns \n Your score: <%=$score%>")
+          alert("Computer wins! You ran out of turns \n  Your score: <%=$score%>")
   }
   function win(){
      alert("You won! \n Your score: <%=$score%>")
@@ -33,7 +35,7 @@
       <%line_number=1%>
       <%for i in (0...files.length).step(3)%>
         <tr>
-          <th scope="row"><%=line_number%></th>
+          <td scope="row"><%=line_number%></td>
           <%line_number+=1%>
           <td><%=files[i]%></td>
           <td><%=files[i+1]%></td>

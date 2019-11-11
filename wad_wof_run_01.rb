@@ -156,12 +156,10 @@ end
 	#Initialization of the number of lives
 	
 	get '/new' do
-		$numberOfLetters=0
 		$lives = 5
 		
-		$spaces = 0
 		g=WOF_Game::Game.new(@input,@output)
-		words = g.readwordfile("wordfile.txt")
+		g.readwordfile("wordfile.txt")
 		secret = g.gensecretword
 		g.setsecretword(secret)
 		g.createtemplate
@@ -170,13 +168,12 @@ end
 		$score = 100*$secretword.length
 	#Eliminating the first and the final bracket of the template
 		template=$template[1]
-	 
 		template=template[1..template.length-2]
 		$template[1]=template
 		#Eliminating existing spaces
 		for i in (0..$template[0].length)
 			if $template[0][i]==" "
-				$spaces+=1
+				
 				$template[1][i]=" "
 			end
 		end
@@ -191,22 +188,23 @@ end
 
 
 	get '/start' do
+		$name=""
+		$letter=""
+		$usedletters=Array.new
 		erb :start
 	end
 
+	
 	post '/new' do
 		foundLetter=false
 		letter=params[:letter].upcase
+		$usedletters+=[letter]
 		index=$letters.index(letter)
 		$letters[index]=""
 		for i in(0..$template[0].length)
 			if letter==$template[0][i]
 				$template[1][i]=letter
-				$numberOfLetters+=1
 				foundLetter=true
-			
-			else
-				
 			end
 		end
 		if foundLetter==false
@@ -217,22 +215,23 @@ end
 	end
 	
 	post '/play' do
+		$used=false
 		foundLetter=false
 		letter=params[:letter].upcase
+		$usedletters+=[letter]
 		if $letters.include? letter
 		index=$letters.index(letter)
 			$letters[index]=""
 			for i in(0..$template[0].length)
 				if letter==$template[0][i]
 					$template[1][i]=letter
-					$numberOfLetters+=1
 					foundLetter=true
-				
 				end
-			
 			end
+		else
+			$used=true
 		end
-		if foundLetter==false
+		if foundLetter==false and $used==false
 			$lives-=1
 			$score-=10*$secretword.length
 		end
@@ -263,16 +262,22 @@ end
 	post '/start' do
 		
 		file=File.open("names.txt","a")
-			file.puts params[:name]
+		$name=params[:name]
+		file.puts $name
 		file.close
 		redirect '/new'
 	end	
 	
 	
+	
+
+	get '/analysis' do
+		erb :analysis
+	end
+	
 	get '/notfound' do
 		erb :notfound
 	end
-
 	
 	not_found do
 		status 404
