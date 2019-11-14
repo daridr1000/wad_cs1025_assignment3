@@ -156,8 +156,7 @@ end
 	#Initialization of the number of lives
 	
 	get '/new' do
-		$lives = 5
-		
+		$lives = 5	
 		g=WOF_Game::Game.new(@input,@output)
 		g.readwordfile("wordfile.txt")
 		secret = g.gensecretword

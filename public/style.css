@@ -1,15 +1,6 @@
-header,
-footer {
-  text-align: center;
-  background-color: rgba(14, 15, 28, 1);
-}
-
 h1 {
-  top: 3em;
-  position: absolute;
   text-align: center;
 }
-
 
 #home {
   top: 10em;
@@ -24,78 +15,92 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   color: white;
-  background-color: rgba(128, 128, 128, 0.979);
-  width:100%
+  background-image: url("https://turntable.kagiso.io/images/Suicide_istock.width-800.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: cursive;
 }
 .navbar {
-  display: inline-table;
+  display: table;
+  background-color: #2e2021;
 }
 
-footer {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  text-align: center;
-  margin: 0px;
-  color: white;
-  height: 2.5em;
-}
 header {
   grid-column-start: 1;
   grid-column-end: 3;
   max-width: 100%;
   overflow-x: hidden;
   position: relative;
+  text-align: center;
 }
 .template > p {
   color: red;
 }
 .template {
-  width:100%;
-  
+  width: 100%;
 }
-
-
 
 form {
   margin: 200px;
   position: relative;
+  bottom: 10em;
 }
 
-.form-control {
+#text {
   width: 35px;
+  position: relative;
+  left: 20em;
+  top: 10em;
+}
+#textname {
+  width: 35px;
+}
+
+#type {
+  position: relative;
+  left: 10em;
+  top: 7em;
 }
 
 .btn {
   margin: 10px;
+  background-color: #2e2021;
+  color: white;
 }
 
-#btn1,#btn2 {
+#btn1,
+#btn2 {
   width: 50px;
   height: 50px;
   float: left;
   text-align: center;
+  background-color: #2e2021;
+  color: white;
+  font-size: 20px;
 }
 
 #btn1 {
-  background-color: red;
+  background-image: url("cooltext341388901523657.png");
+  background-color: black;
+  background-size: cover;
 }
-#btn2 {
-  background-color: green;
-  color: white;
-}
+
 .navbar > a {
   color: white;
   text-decoration: none;
   background-color: none;
 }
 
-.alphabet{
-    position: relative;
-    top:-30em;
-   
+.alphabet {
+  position: relative;
+  bottom: 32em;
+  left: 0;
+  background-color: rgb(56, 16, 15);
+  width: 20%;
 }
 
-.alphabet > button .name >button {
+.alphabet > button .name > button {
   width: 20px;
   float: center;
   text-align: center;
@@ -108,9 +113,11 @@ form {
 }
 
 .lives > button {
-  width: 100px;
+  width: 120px;
+  position: relative;
+  left: 22.5em;
+  bottom: 10em;
 }
-
 
 .template > a {
   text-decoration: none;
@@ -129,11 +136,48 @@ form {
   min-height: 100vh;
 }
 
-.name >button{
-    width:200px;
+.name > button {
+  width: 135px;
+  color: white;
+  background-color: #2e2021;
+  border: 0;
 }
 
-.leaderboard{
-  position:relative;
-  top:6em;
+.leaderboard {
+  
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+th,td{
+  background-color: #2e2021;
+}
+
+footer {
+  background-color: #2e2021;
+}
+
+.card {
+  background-color: #2e2021;
+  width: 50%;
+  text-align: left;
+  position: relative;
+  left: 20em;
+}
+
+.home {
+  text-align: center;
+}
+
+.input-group-text {
+  color: white;
+  background-color: #2e2021;
+  border-color: #2e2021;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 20em;
+  left: 20em;
 }
