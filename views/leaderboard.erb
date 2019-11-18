@@ -1,24 +1,22 @@
 <h1>Leaderboard</h1>
-
 <%if $template%>
-<%if $lives==0 or $template[0]==$template[1]%>
-  <%if $lives==0%>
-     <script>window.alert("Computer wins!\n  You ran out of turns \nThe word was <%=$secretword%>\nYour score: <%=$score%> \n If u want to start a new game, press the button from the menu!")
-              
-     </script>
+  <%if $lives==0 or $template[0]==$template[1]%>
+    <%if $lives==0%>
+      <script>
+        window.alert("Computer wins!\nYou ran out of lives!\nThe word was <%=$secretword%>\nYour score: <%=$score%>\nIf u want to start a new game, press the button from the menu!")
+      </script>
+    <%end%>
+    <%if $template[0]==$template[1]%>
+      <script>
+        window.alert("You win!\nThe word was <%=$secretword%>\nYour score: <%=$score%>\nIf u want to start a new game, press the button from the menu!")
+      </script>
+    <%end%>
+    <%$template=nil%>
   <%end%>
-  <%if $template[0]==$template[1]%>
-   
-    <script>window.alert("You won! \n The word was <%=$secretword%>\n Your score: <%=$score%>\nIf u want to start a new game, press the button from the menu!")</script>
-  <%end%>
-  <%$template=nil%>
 <%end%>
-<%end%>
-
 <div class="leaderboard">
   <table class="table table-hover table-dark">
     <thead>
-     
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
@@ -27,15 +25,14 @@
       </tr>
     </thead>
     <tbody>
-      
       <%for i in (0...$files.length)%>
         <tr>
           <td scope="row"><%=(i+1)%></td>
           <td><%=$files[i][0]%></td>
           <td><%=$files[i][1]%></td>
           <td><%=$files[i][2]%>
-        </tr>
-      <%end%>
-    </tbody>
-  </table>
-</div>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>

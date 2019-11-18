@@ -11,13 +11,17 @@
     <%end%>
   </div>
   <%if $used==true%>
-    <script>window.alert("You have already chosen this letter. Try another one!")</script>
-    <%end%>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Letter already typed!</strong> You should try another letter!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <%end%>
   <form action="/play" method="post">
     <div class="form-group" id="form_letter">
       <input class="form-control" type="text" pattern="[A-Za-z]{1}" name="letter" id="text"  required>
       <button type="submit" class="btn" id="type">Type a letter!</button>
-     
     </div>
   </form>
   <script>
@@ -26,18 +30,17 @@
     }
   </script>
   <div class="lives">
-    <button class="btn">Turns left: <%=$lives%></button>
+    <button class="btn">Lives: <%=$lives%></button>
   </div>
   <div class="lives">
     <button name="score" class="btn">Score: <%=$score%></button>
   </div>
-  
   <div class="alphabet">
     <%for i in (0...$letters.length)%>
-    <%if $letters[i]!=""%>
-      <button type="button" class="btn">
-        <%=$letters[i]%>
-      </button>
+      <%if $letters[i]!=""%>
+        <button type="button" class="btn">
+          <%=$letters[i]%>
+        </button>
       <%end%>
     <%end%>
   </div>

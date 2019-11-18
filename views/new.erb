@@ -21,13 +21,12 @@
     document.getElementById("text").focus();
     }
   </script>
-   <div class="lives">
-      <button class="btn">Turns left: <%=$lives%></button>
+  <div class="lives">
+    <button class="btn">Turns left: <%=$lives%></button>
   </div>
   <div class="lives">
-      <button class="btn">Score: <%=$score%></button>
+    <button class="btn">Score: <%=$score%></button>
   </div>
-
   <div class="alphabet">
     <%$letters=*('A'..'Z')%>
     <%for i in (0...$letters.length)%>
@@ -36,5 +35,4 @@
       </button>
     <%end%>
   </div>
- 
 </div>

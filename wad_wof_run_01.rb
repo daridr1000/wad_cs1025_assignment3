@@ -41,87 +41,7 @@ module WOF_Game
 	if game == "1"
 		
 	# Any code added to command line game should be added below.
-	g.start
-	g.resetgame
-	words = g.readwordfile(filename)
-	if  words == 0
-		@output.puts 'Error reading file.'
-		exit
-	end
-#		@output.puts g.wordtable.inspect
-#		@output.puts "Words: #{words}"
-	secret = g.gensecretword
-	g.setsecretword(secret)
-#		@output.puts "Secret word:" + g.secretword
-	g.createtemplate
-	g.displaytemplate
 	
-	while menu != "9"
-		g.displaymenu
-		puts g.menuprompt
-		menu = gets.chomp
-		if menu == "1"
-			guess = "_"
-			while guess != "" && turn < (GOES) && win != 1
-				g.displaytemplate
-				@output.puts 'Guess a missing charater from the hidden word/phrase. Enter returns to menu.'
-				guess = g.getguess
-				@output.puts "You entered: #{guess}"	#need to check value overwritten
-				g.storeguess(guess)
-				if g.charinword(guess) > 0
-					@output.puts "Character #{guess} is in word."
-					g.showcharinword(guess)
-					win = g.checkifwon
-					if win == 1
-						g.incrementscore
-						g.incrementplayed
-							@output.puts "You win!"	#need to check value overwritten
-						g.revealword
-					end
-				else
-					if guess != ""
-						turn = turn + 1
-						g.incrementplayed
-						g.incrementturn
-					end
-				end
-				@output.puts "You have #{g.getturnsleft} lives left."
-				if turn >= (GOES)
-						@output.puts "You lose!"
-					
-					g.revealword
-				end
-			end
-		elsif menu == "2"		# Reset game
-			turn = 0
-			win = 0
-			@output.puts "New game...\n"
-			g.resetgame
-			words = g.readwordfile(filename)
-			if  words == 0
-				@output.puts 'Error reading file.'
-				exit
-			end
-			@output.puts g.wordtable.inspect
-			@output.puts "Words: #{words}"
-			secret = g.gensecretword
-			g.setsecretword(secret)
-			@output.puts "Secret word:" + g.secretword
-			g.createtemplate
-			g.displaytemplate
-		elsif menu == "3"
-			g.displayanalysis
-		elsif menu == "9"
-			@output.puts "\n"
-		elsif menu == "~"
-			g.displaysecretword
-		else
-			@output.puts "Invalid input entered."
-		end
-	end
-	@output.puts "The secret word was: "
-	g.revealword
-	g.finish
 
 	
 
@@ -146,151 +66,181 @@ end
 	# Any code added to web-based game should be added below.
 	
 
-	
-	
+	#Creating the game object
+	$g=WOF_Game::Game.new(@input,@output)
+	#Saving the name and the id of the student in a variable
+	$credits=$g.start
 	get '/' do 
 		erb :home
 	end
-
-	$letters=*('A'..'Z')
-	#Initialization of the number of lives
-	
 	get '/new' do
-		$lives = 5	
-		g=WOF_Game::Game.new(@input,@output)
-		g.readwordfile("wordfile.txt")
-		secret = g.gensecretword
-		g.setsecretword(secret)
-		g.createtemplate
-		$template=g.getsecrettemplate
+		#Reading the file which contains all the words
+		$g.readwordfile("wordfile.txt")
+		#Initializing the template and the secret word inside a multi-dimensional array
+		secret = $g.gensecretword
+		$g.setsecretword(secret)
+		$g.createtemplate
+		$template=$g.getsecrettemplate
 		$secretword=$template[0]
+		#Initializing the number of lives and the score
+		$lives = 5	
 		$score = 100*$secretword.length
-	#Eliminating the first and the final bracket of the template
+		#Eliminating the first and the final bracket of the template
 		template=$template[1]
 		template=template[1..template.length-2]
 		$template[1]=template
-		#Eliminating existing spaces
+		#Revealing the existing spaces of the secret word
 		for i in (0..$template[0].length)
 			if $template[0][i]==" "
-				
 				$template[1][i]=" "
 			end
 		end
-		
 		erb :new
 	end
-	
-
 	get '/play' do
 		erb :play
 	end
+	#The '/new' and '/play' pages are similar, with the difference that the '/new' page restarts completely the game and the variables  
 
 
+	#Initializing the array which contains all the letters
+	$letters=*('A'..'Z')
 	get '/start' do
+		#Initializing the name of each player which will be added to the leaderboard after the players choses his/her name
 		$name=""
-		$letter=""
-		$start=true
+		#Initializing the analysis message which will be displayed on the analysis page each time a game is finished
+		$analysis_message=""
+		#The following two arrays have been used only for the analysis page
+		#Initializing the array where all the used letters will be saved
 		$usedletters=Array.new
+		#Initializing a boolean array which will take notice of whether an used letter is in the secret word or not
 		$foundLetter=Array.new
 		erb :start
 	end
-
+	post '/start' do
+		#Opening the file which contains the name of the player, his/her score and the word he/she tried to guess
+		file=File.open("names.txt","a")
+		#Extracting the name which has been typed in the HTML input text box and saving it in a variable
+		$name=params[:name]
+		#Adding the name of the player to the text file
+		file.puts $name
+		#Closing the file
+		file.close
+		redirect '/new'
+	end	
+	get '/leaderboard' do
+		#Saving all of the file information into a global array
+		$files=File.open("names.txt").to_a
+		#Initializing a 3 dimensional array which will contain the names, the scores of the players and the word they tried to guess 
+		names=Array.new
+		for i in (0..$files.length).step(3)
+			#Appending the names, the scores and the words to the 3 dimensional array accordingly
+			names+=[[$files[i],$files[i+1],$files[i+2]]]
+		end	
+		#Deleting the last remaining space
+		names.delete_at(names.length-1)
+		#Sorting the whole array in descending order by score 
+		names=names.sort_by {|k|k[1]}.reverse
+		#Transferring all the information to a global variable which is used inside the "leaderboard" erb to display the leaderboard itself 
+		$files=names
+		erb :leaderboard
+	end
 	
 	post '/new' do
+		#Extracting the letter which has been typed in the HTML input text box and saving it in a variable
 		letter=params[:letter].upcase
+		#Appending the current letter to the array where all the typed letters are saved
 		$usedletters+=[letter]
+		#Initially assuming that the letter hasn't been found yet in the secret word 
 		foundLetter=false
+		#Eliminating the typed letter from the letters array
 		index=$letters.index(letter)
 		$letters[index]=""
+		#Checking whether the typed letter is in the secret word or not 
 		for i in(0..$template[0].length)
 			if letter==$template[0][i]
+		#If yes, update the template by showing the letter
 				$template[1][i]=letter
-				if foundLetter==false
-					$foundLetter+=[true]
-				end
+				#Adding true to the boolean array 
+				$foundLetter+=[true] 
+				#Changing the foundLetter variable into "true" as the letter is in the secret word
 				foundLetter=true
-				
 			end
 		end
 		if foundLetter==false
+			#If the letter has not been found in the secret word, append "false" in the boolean array
 			$foundLetter+=[false]
+			#Updating the lives and the score in accordance with to the rules 
 			$lives-=1
 			$score-=100
 		end
 		redirect '/play'
 	end
-	
+
 	post '/play' do
-		$used=false
-		foundLetter=false
+		
+		#Extracting the letter which has been typed in the HTML input text box and saving it in a variable
 		letter=params[:letter].upcase
+		#Assuming that it's the first time the player types this letter (this variable is used in the "play" erb)
+		$used=false
+		#Appending the current letter to the array where all the typed letters are saved
 		$usedletters+=[letter]
+		#Initially assuming that the letter hasn't been found yet in the secret word 
+		foundLetter=false
+		#Checking whether the letter has been already typed or not
 		if $letters.include? letter
+			#Eliminating the typed letter from the letters array
 		index=$letters.index(letter)
-			$letters[index]=""
+		$letters[index]=""
+			#Checking whether the typed letter is in the secret word or not 
 			for i in(0..$template[0].length)
 				if letter==$template[0][i]
+					#If yes, update the template by showing the letter
 					$template[1][i]=letter
-					if foundLetter==false
-						$foundLetter+=[true]
-					end
+					#Adding true to the boolean array 
+					$foundLetter+=[true] 
+					#Changing the foundLetter variable into "true" as the letter is in the secret word
 					foundLetter=true
-					
 				end
 			end
 		else
+			#Changing the $used variable into "true" as the letter is not anymore in the $letters array
 			$used=true
 		end
 		if foundLetter==false 
-			if $used==false
+			#If the letter has not been found in the secret word, append "false" in the boolean array
+			$foundLetter+=[false]
+			if $used==false # Updating the score and the lives remaining ONLY if the typed letter has not been typed before
 				$lives-=1
 				$score-=10*$secretword.length
 			end
-			$foundLetter+=[false]
+			
 		end
-		if $template[0]==$template[1]
+		if $lives==0 or $template[0]==$template[1]
+			if $template[0]==$template[1] # The player wins the game ONLY if the secret word and the template initially provided correspond
+				#Setting the final analysis message accordingly 
+				$analysis_message="Word guessed!<br>You won!<br>Secret word:#{$template[0]}<br>Your score:#{$score}"
+			end
+			if $lives==0 # The computer wins the game ONLY if the player runs out of lives
+				#As the player lost, his/her score will be 0
+				$score=0
+				#Setting the final analysis message accordingly
+				$analysis_message="You ran out of lives! <br>Computer won!<br>Secret word:#{$template[0]}<br>Your score:#{$score}"
+			end
+			#Opening the file which contains the name of the player, his/her score and the word he/she tried to guess
 			file=File.open("names.txt","a")
-				file.puts $score
-				file.puts $secretword
-				file.close
-				$analysis_message="Word guessed! You won! Secret word:#{$template[0]}"
+			#Adding the score and the secret word to the file
+			file.puts $score
+			file.puts $secretword
+			#Closing the file
+			file.close
 			redirect '/leaderboard'
 		end	
-		if $lives==0
-			$score=0
-			file=File.open("names.txt","a")
-				file.puts $score
-				file.puts $secretword
-				file.close
-				$analysis_message="You ran out of turns! Computer won!Secret word:#{$template[0]}"
-			redirect '/leaderboard'
-		end
 		redirect '/play'
 	end
-	
-	get '/leaderboard' do
-		$files=File.open("names.txt").to_a
-		names=Array.new
-		if $files.length>1
-			for i in (0..$files.length).step(3)
-				names+=[[$files[i],$files[i+1],$files[i+2]]]
-			end
-		end
-		names.delete_at(names.length-1)
-		names=names.sort_by {|k|k[1]}.reverse
-		$files=names
-		erb :leaderboard
+	post '/leaderboard' do
+		redirect '/start'
 	end
-	
-	
-	post '/start' do
-		file=File.open("names.txt","a")
-		$name=params[:name]
-		
-		file.puts $name
-		file.close
-		redirect '/new'
-	end	
 	get '/analysis' do
 		erb :analysis
 	end

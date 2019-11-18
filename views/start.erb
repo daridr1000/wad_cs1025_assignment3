@@ -1,18 +1,18 @@
 <h1>Start a new game!</h1>
 <br>
-<form action="" method="post"><div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-default">Type your name</span>
+<form action="" method="post">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="inputGroup-sizing-default">Type your name</span>
+    </div>
+    <input class="form-control" type="text" name="name" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="textname">
   </div>
-  <input class="form-control" type="text" name="name" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="textname">
-</div>
-<div class="name">
+  <div class="name">
     <button type="submit" >START GAME</button>
-</div>
+  </div>
 </form>
-
 <script>
-    window.onload = function(){
-    document.getElementById("textname").focus();
-    }
-  </script>
+  window.onload = function(){
+  document.getElementById("textname").focus();
+  }
+</script>

@@ -15,11 +15,8 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   color: white;
-  background-image: url("https://turntable.kagiso.io/images/Suicide_istock.width-800.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  font-family: cursive;
+  background-color: rgb(56, 46, 46);
+  font-family: inherit;
 }
 .navbar {
   display: table;
@@ -49,9 +46,9 @@ form {
 
 #text {
   width: 35px;
-  position: relative;
-  left: 20em;
-  top: 10em;
+    position: absolute;
+    left: 20em;
+    top: 7.5em;
 }
 #textname {
   width: 35px;
@@ -93,8 +90,8 @@ form {
 }
 
 .alphabet {
-  position: relative;
-  bottom: 32em;
+  position: absolute;
+  top:13em;
   left: 0;
   background-color: rgb(56, 16, 15);
   width: 20%;
@@ -180,4 +177,11 @@ footer {
   position: absolute;
   bottom: 20em;
   left: 20em;
+}
+
+.alert{
+  width:30em;
+  position:relative;
+  top:10em;
+  left:23em;
 }
