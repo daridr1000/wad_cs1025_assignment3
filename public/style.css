@@ -66,6 +66,7 @@ form {
   color: white;
 }
 
+
 #btn1,
 #btn2 {
   width: 50px;
@@ -184,4 +185,9 @@ footer {
   position:relative;
   top:10em;
   left:23em;
+}
+
+#exit{
+  position:relative;
+
 }

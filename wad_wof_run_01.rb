@@ -67,179 +67,125 @@ end
 	
 
 	#Creating the game object
-	$g=WOF_Game::Game.new(@input,@output)
+	g=WOF_Game::Game.new(@input,@output)
 	#Saving the name and the id of the student in a variable
-	$credits=$g.start
+	$credits=g.start
 	get '/' do 
 		erb :home
 	end
 	get '/new' do
 		#Reading the file which contains all the words
-		$g.readwordfile("wordfile.txt")
-		#Initializing the template and the secret word inside a multi-dimensional array
-		secret = $g.gensecretword
-		$g.setsecretword(secret)
-		$g.createtemplate
-		$template=$g.getsecrettemplate
-		$secretword=$template[0]
-		#Initializing the number of lives and the score
-		$lives = 5	
-		$score = 100*$secretword.length
-		#Eliminating the first and the final bracket of the template
-		template=$template[1]
-		template=template[1..template.length-2]
-		$template[1]=template
-		#Revealing the existing spaces of the secret word
-		for i in (0..$template[0].length)
-			if $template[0][i]==" "
-				$template[1][i]=" "
-			end
-		end
+		g.readwordfile("wordfile.txt")
+		#Initializing the template and the secret word 
+		secret = g.gensecretword
+		g.setsecretword(secret)
+		g.createtemplate
+		$template=g.getsecrettemplate
+		$secretword=g.getsecretword
+		#Initializing the number of lives and the score and the letters array
+		g.resetgame
+		$score,$lives=g.getscore_lives
+		$letters=g.getletters
 		erb :new
 	end
 	get '/play' do
 		erb :play
 	end
-	#The '/new' and '/play' pages are similar, with the difference that the '/new' page restarts completely the game and the variables  
-
-
-	#Initializing the array which contains all the letters
-	$letters=*('A'..'Z')
+	#The '/new' and '/play' pages are similar, with the difference that the '/new' page restarts the game and the variables completely 
+	#Initializing the analysis message which will be displayed on the analysis page each time a game is finished
+	$analysis_message=""
 	get '/start' do
-		#Initializing the name of each player which will be added to the leaderboard after the players choses his/her name
-		$name=""
-		#Initializing the analysis message which will be displayed on the analysis page each time a game is finished
 		$analysis_message=""
-		#The following two arrays have been used only for the analysis page
-		#Initializing the array where all the used letters will be saved
-		$usedletters=Array.new
-		#Initializing a boolean array which will take notice of whether an used letter is in the secret word or not
-		$foundLetter=Array.new
 		erb :start
 	end
 	post '/start' do
-		#Opening the file which contains the name of the player, his/her score and the word he/she tried to guess
-		file=File.open("names.txt","a")
 		#Extracting the name which has been typed in the HTML input text box and saving it in a variable
-		$name=params[:name]
+		name=params[:name]
 		#Adding the name of the player to the text file
-		file.puts $name
-		#Closing the file
-		file.close
+		g.getname("names.txt",name)
+		#Adding the name of the player to the analysis message
+		$analysis_message+="Set name for player:#{name}<br>"
 		redirect '/new'
 	end	
 	get '/leaderboard' do
-		#Saving all of the file information into a global array
-		$files=File.open("names.txt").to_a
-		#Initializing a 3 dimensional array which will contain the names, the scores of the players and the word they tried to guess 
-		names=Array.new
-		for i in (0..$files.length).step(3)
-			#Appending the names, the scores and the words to the 3 dimensional array accordingly
-			names+=[[$files[i],$files[i+1],$files[i+2]]]
-		end	
-		#Deleting the last remaining space
-		names.delete_at(names.length-1)
-		#Sorting the whole array in descending order by score 
-		names=names.sort_by {|k|k[1]}.reverse
-		#Transferring all the information to a global variable which is used inside the "leaderboard" erb to display the leaderboard itself 
-		$files=names
+		#Transferring all the information to a global variable which is used inside the "leaderboard" erb to display the leaderboard content
+		$files=g.getleaderboardcontent("names.txt")
 		erb :leaderboard
 	end
 	
 	post '/new' do
 		#Extracting the letter which has been typed in the HTML input text box and saving it in a variable
 		letter=params[:letter].upcase
-		#Appending the current letter to the array where all the typed letters are saved
-		$usedletters+=[letter]
-		#Initially assuming that the letter hasn't been found yet in the secret word 
-		foundLetter=false
+		#Adding the typed letter to the analysis message
+		$analysis_message+="Player types letter: #{letter.upcase}<br>"
 		#Eliminating the typed letter from the letters array
-		index=$letters.index(letter)
-		$letters[index]=""
+		g.eliminate_letter(letter)
 		#Checking whether the typed letter is in the secret word or not 
-		for i in(0..$template[0].length)
-			if letter==$template[0][i]
-		#If yes, update the template by showing the letter
-				$template[1][i]=letter
-				#Adding true to the boolean array 
-				$foundLetter+=[true] 
-				#Changing the foundLetter variable into "true" as the letter is in the secret word
-				foundLetter=true
-			end
+		if g.checkifletter(letter)==true
+			#If yes, update the template by showing the letter
+			g.showcharinword(letter)
+			#Appending an appropriate message to the analysis message string
+			$analysis_message+=" Letter #{letter} is in the word<br>Update template <br>Update used letters <br>"
+		else
+			#If the letter has not been found in the secret word, update the lives and the score in accordance to the rules 
+			g.updatescore_lives
+			$analysis_message+="Letter #{letter} is not in the word <br>Update score<br>Update lives left<br>Update used letters<br>"
 		end
-		if foundLetter==false
-			#If the letter has not been found in the secret word, append "false" in the boolean array
-			$foundLetter+=[false]
-			#Updating the lives and the score in accordance with to the rules 
-			$lives-=1
-			$score-=100
-		end
+		#Updating the template,score and lives variables and the letters array
+		$template=g.getsecrettemplate
+		$score,$lives=g.getscore_lives
+		$letters=g.getletters
 		redirect '/play'
 	end
 
 	post '/play' do
-		
 		#Extracting the letter which has been typed in the HTML input text box and saving it in a variable
 		letter=params[:letter].upcase
-		#Assuming that it's the first time the player types this letter (this variable is used in the "play" erb)
-		$used=false
-		#Appending the current letter to the array where all the typed letters are saved
-		$usedletters+=[letter]
-		#Initially assuming that the letter hasn't been found yet in the secret word 
-		foundLetter=false
+		#Adding the typed letter to the analysis message
+		$analysis_message+="Player types letter: #{letter.upcase}<br>"
 		#Checking whether the letter has been already typed or not
-		if $letters.include? letter
+		$used=g.letterinarray(letter) #Global variable used in the "play" erb for displaying an alert message
+		if $used==true
 			#Eliminating the typed letter from the letters array
-		index=$letters.index(letter)
-		$letters[index]=""
+			g.eliminate_letter(letter)
 			#Checking whether the typed letter is in the secret word or not 
-			for i in(0..$template[0].length)
-				if letter==$template[0][i]
-					#If yes, update the template by showing the letter
-					$template[1][i]=letter
-					#Adding true to the boolean array 
-					$foundLetter+=[true] 
-					#Changing the foundLetter variable into "true" as the letter is in the secret word
-					foundLetter=true
-				end
+			if g.checkifletter(letter)==true
+						#If yes, update the template by showing the letter
+						g.showcharinword(letter)
+						#Appending an appropriate message to the analysis message string
+						$analysis_message+="Letter #{letter} is in the word<br>Update template <br>Update used letters <br>"
+			else# Updating the score and the lives remaining ONLY if the typed letter has not been typed before
+					g.updatescore_lives
+					#Appending an appropriate message to the analysis message string
+					$analysis_message+="Letter #{letter} is not in the word <br>Update score<br>Update lives left<br>Update used letters<br>"
 			end
 		else
-			#Changing the $used variable into "true" as the letter is not anymore in the $letters array
-			$used=true
+			#Appending an appropriate message to the analysis message string
+			$analysis_message+="Letter #{letter} has been already typed<br>Try another one!<br>"
 		end
-		if foundLetter==false 
-			#If the letter has not been found in the secret word, append "false" in the boolean array
-			$foundLetter+=[false]
-			if $used==false # Updating the score and the lives remaining ONLY if the typed letter has not been typed before
-				$lives-=1
-				$score-=10*$secretword.length
-			end
-			
-		end
-		if $lives==0 or $template[0]==$template[1]
-			if $template[0]==$template[1] # The player wins the game ONLY if the secret word and the template initially provided correspond
+		if g.checkifwin or g.checkifloss
+			if g.checkifwin # The player wins the game ONLY if the secret word and the initially provided template correspond
 				#Setting the final analysis message accordingly 
-				$analysis_message="Word guessed!<br>You won!<br>Secret word:#{$template[0]}<br>Your score:#{$score}"
+				$analysis_message+="Word guessed!<br>You won!<br>Secret word:#{$secretword}<br>Your score:#{$score}<br>End of the game!<br>See your score inside the leaderboard!"
 			end
-			if $lives==0 # The computer wins the game ONLY if the player runs out of lives
-				#As the player lost, his/her score will be 0
-				$score=0
+			if g.checkifloss # The computer wins the game ONLY if the player runs out of lives
+				#If the player loses, his/her score will be 0
+				g.getscorezero
+				$score=g.getscore_lives[0]
 				#Setting the final analysis message accordingly
-				$analysis_message="You ran out of lives! <br>Computer won!<br>Secret word:#{$template[0]}<br>Your score:#{$score}"
+				$analysis_message+="You ran out of lives! <br>Computer won!<br>Secret word:#{$secretword}<br>Your score:#{$score}<br>End of the game!<br>See your score inside the leaderboard!"
 			end
-			#Opening the file which contains the name of the player, his/her score and the word he/she tried to guess
-			file=File.open("names.txt","a")
-			#Adding the score and the secret word to the file
-			file.puts $score
-			file.puts $secretword
-			#Closing the file
-			file.close
+			g.getscore_secretword("names.txt")
 			redirect '/leaderboard'
 		end	
+		#Updating the template,score and lives variables
+		$template=g.getsecrettemplate
+		$score,$lives=g.getscore_lives
+		$letters=g.getletters
 		redirect '/play'
 	end
 	post '/leaderboard' do
-		redirect '/start'
+		redirect '/'
 	end
 	get '/analysis' do
 		erb :analysis

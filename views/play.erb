@@ -1,16 +1,18 @@
 <div class="template">
   <div class="buttons">
-    <%for i in (0...$template[1].length)%>
-      <%if $template[1][i]=="_"%>
+    <%if $template%>
+    <%for i in (0...$template.length)%>
+      <%if $template[i]=="_"%>
         <button id="btn1" class="btn">
         </button>
       <%else%>
         <button id="btn2" class="btn">
-          <%=$template[1][i]%> </button>
+          <%=$template[i]%> </button>
       <%end%>
     <%end%>
+    <%end%>
   </div>
-  <%if $used==true%>
+  <%if $used==false%>
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <strong>Letter already typed!</strong> You should try another letter!
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -30,7 +32,7 @@
     }
   </script>
   <div class="lives">
-    <button class="btn">Lives: <%=$lives%></button>
+    <button class="btn">Lives left: <%=$lives%></button>
   </div>
   <div class="lives">
     <button name="score" class="btn">Score: <%=$score%></button>

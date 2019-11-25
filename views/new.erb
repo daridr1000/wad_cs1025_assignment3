@@ -1,12 +1,12 @@
 <div class="template">
   <div class="buttons">
-    <%for i in (0...$template[1].length)%>
-      <%if $template[1][i]=="_"%>
+    <%for i in (0...$template.length)%>
+      <%if $template[i]=="_"%>
         <button id="btn1" class="btn">
         </button>
       <%else%>
         <button id="btn2" class="btn">
-          <%=$template[1][i]%> </button>
+          <%=$template[i]%> </button>
       <%end%>
     <%end%>
   </div>
@@ -22,7 +22,7 @@
     }
   </script>
   <div class="lives">
-    <button class="btn">Turns left: <%=$lives%></button>
+    <button class="btn">Lives left: <%=$lives%></button>
   </div>
   <div class="lives">
     <button class="btn">Score: <%=$score%></button>

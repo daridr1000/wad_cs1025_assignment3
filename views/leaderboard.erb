@@ -1,17 +1,18 @@
 <h1>Leaderboard</h1>
 <%if $template%>
-  <%if $lives==0 or $template[0]==$template[1]%>
-    <%if $lives==0%>
+  <%if $score==0 or $secretword==$template%>
+    <%if $score==0%>
       <script>
         window.alert("Computer wins!\nYou ran out of lives!\nThe word was <%=$secretword%>\nYour score: <%=$score%>\nIf u want to start a new game, press the button from the menu!")
       </script>
     <%end%>
-    <%if $template[0]==$template[1]%>
+    <%if $secretword==$template%>
       <script>
         window.alert("You win!\nThe word was <%=$secretword%>\nYour score: <%=$score%>\nIf u want to start a new game, press the button from the menu!")
       </script>
     <%end%>
     <%$template=nil%>
+    
   <%end%>
 <%end%>
 <div class="leaderboard">

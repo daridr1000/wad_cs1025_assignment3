@@ -3,7 +3,7 @@
   <table class="table table-hover table-dark">
     <thead>
       <tr>
-        <th scope="col">Goals</th>
+        <th scope="col">Goals </th>
         <th scope="col">Tasks</th>
         <th scope="col">Actions</th>
       </tr>
@@ -21,28 +21,7 @@
         Update lives left<br>
         Update letters which have not been used yet</td>
       <td scope="row">
-        <%if $name!=""%>Set name for player: <%=$name%><br>
-        <%end%>
-        <%if $usedletters and $foundLetter%>
-          <%for i in (0..$usedletters.length-1)%>
-            <%if $usedletters[i]!=""%>
-              Player taps letter <%=$usedletters[i]%> <br>
-              <%if $foundLetter[i]==true%> Letter <%=$usedletters[i]%> is in the word<br>
-                Update template <br>
-                Update used letters <br>
-              <%else%>    Letter <%=$usedletters[i]%> is not in the word <br>
-                Update score<br>
-                Update lives left<br>
-                Update used letters<br>
-              <%end%>
-            <%end%>
-          <%end%>
-        <%end%>
-        <%if $analysis_message!=""%>
-          <%=$analysis_message%><br>
-          End of the game!<br>
-          See your score inside the leaderboard!
-        <%end%>
+          <%=$analysis_message%>
       </td>
     </tbody>
   </table>
